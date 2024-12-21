@@ -1,0 +1,36 @@
+<h1>Sliders</h1>
+<a href="/sliders/create" class="btn btn-primary mb-3">Add Slider</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>URL</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (sliders && sliders.length > 0) { %>
+      <% sliders.forEach(slider => { %>
+        <tr>
+          <td><img src="<%= slider.image %>" alt="<%= slider.title %>" style="width: 100px;"></td>
+          <td><%= slider.title %></td>
+          <td><%= slider.description %></td>
+          <td><%= slider.buttonText %></td>
+          <td><a href="<%= slider.url %>" target="_blank"><%= slider.url %></a></td>
+          <td>
+            <a href="/sliders/edit/<%= slider._id %>" class="btn btn-warning btn-sm">Edit</a>
+            <form action="/sliders/delete/<%= slider._id %>" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    <% } else { %>
+      <tr>
+        <td colspan="5" class="text-center">No sliders available</td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

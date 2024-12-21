@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "name": "Smartphone X",
+    "category": "electronics",
+    "price": 799.99,
+    "image": "https://via.placeholder.com/300x200?text=Smartphone+X",
+    "description": "A powerful smartphone with an advanced processor and camera.",
+    "reviews": [
+      {
+        "reviewer": "Alice",
+        "comment": "Great phone! Totally worth the price."
+      },
+      { "reviewer": "John", "comment": "Amazing camera quality!" }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Leather Jacket",
+    "category": "fashion",
+    "price": 149.99,
+    "image": "https://via.placeholder.com/300x200?text=Leather+Jacket",
+    "description": "A powerful smartphone with an advanced processor and camera.",
+    "reviews": [
+      {
+        "reviewer": "Alice",
+        "comment": "Great phone! Totally worth the price."
+      },
+      { "reviewer": "John", "comment": "Amazing camera quality!" }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Dining Table",
+    "category": "home",
+    "price": 499.99,
+    "image": "https://via.placeholder.com/300x200?text=Dining+Table",
+    "description": "A powerful smartphone with an advanced processor and camera.",
+    "reviews": [
+      {
+        "reviewer": "Alice",
+        "comment": "Great phone! Totally worth the price."
+      },
+      { "reviewer": "John", "comment": "Amazing camera quality!" }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Wireless Headphones",
+    "category": "electronics",
+    "price": 199.99,
+    "image": "https://via.placeholder.com/300x200?text=Wireless+Headphones",
+    "description": "A powerful smartphone with an advanced processor and camera.",
+    "reviews": [
+      {
+        "reviewer": "Alice",
+        "comment": "Great phone! Totally worth the price."
+      },
+      { "reviewer": "John", "comment": "Amazing camera quality!" }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Sneakers",
+    "category": "fashion",
+    "price": 79.99,
+    "image": "https://via.placeholder.com/300x200?text=Sneakers",
+    "description": "A powerful smartphone with an advanced processor and camera.",
+    "reviews": [
+      {
+        "reviewer": "Alice",
+        "comment": "Great phone! Totally worth the price."
+      },
+      { "reviewer": "John", "comment": "Amazing camera quality!" }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Sofa Set",
+    "category": "home",
+    "price": 899.99,
+    "image": "https://via.placeholder.com/300x200?text=Sofa+Set",
+    "description": "A powerful smartphone with an advanced processor and camera.",
+    "reviews": [
+      {
+        "reviewer": "Alice",
+        "comment": "Great phone! Totally worth the price."
+      },
+      { "reviewer": "John", "comment": "Amazing camera quality!" }
+    ]
+  }
+]

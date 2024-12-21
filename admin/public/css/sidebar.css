@@ -1,0 +1,23 @@
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 10px;
+  }
+  
+  .sidebar .nav-link {
+    padding: 10px 15px;
+    display: block;
+  }
+  
+  .sidebar .nav-link:hover {
+    background-color: #495057;
+    text-decoration: none;
+  }
+  
+  .content {
+    margin-left: 250px;
+  }
+  

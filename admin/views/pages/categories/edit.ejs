@@ -1,0 +1,37 @@
+<h1 class="text-center">Edit Category</h1>
+<form action="/categories/edit/<%= category._id %>" method="POST" class="mt-4">
+  <div class="mb-3">
+    <label for="name" class="form-label">Category Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      name="name"
+      value="<%= category.name %>"
+      placeholder="Enter category name"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      class="form-control"
+      id="description"
+      name="description"
+      rows="3"
+      placeholder="Enter category description"
+    ><%= category.description %></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="icon" class="form-label">Icon URL</label>
+    <input
+      type="text"
+      class="form-control"
+      id="icon"
+      name="icon"
+      value="<%= category.icon %>"
+      placeholder="Enter icon URL"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Update Category</button>
+</form>

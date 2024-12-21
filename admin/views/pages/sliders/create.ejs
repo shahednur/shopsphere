@@ -1,0 +1,24 @@
+<h1 class="text-center"><%= pageTitle %></h1>
+<form action="/sliders/create" method="POST" class="mt-4">
+  <div class="mb-3">
+    <label for="title" class="form-label">Slider Title</label>
+    <input type="text" class="form-control" id="title" name="title" placeholder="Enter slider title" required>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter slider description" required></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="image" class="form-label">Image URL</label>
+    <input type="text" class="form-control" id="image" name="image"  placeholder="Enter image URL" required>
+  </div>
+  <div class="mb-3">
+    <label for="buttonText" class="form-label">Button Text</label>
+    <input type="text" class="form-control" id="buttonText" name="buttonText"  placeholder="Enter button text" required>
+  </div>
+  <div class="mb-3">
+    <label for="url" class="form-label">URL</label>
+    <input type="text" class="form-control" id="url" name="url" placeholder="Enter optional URL">
+  </div>
+  <button type="submit" class="btn btn-primary">Create Slider</button>
+</form>

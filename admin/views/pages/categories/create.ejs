@@ -1,0 +1,16 @@
+<h1 class="text-center">Create Category</h1>
+    <form action="/categories/create" method="POST" class="mt-4">
+      <div class="mb-3">
+        <label for="name" class="form-label">Category Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter category name" required>
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter category description"></textarea>
+      </div>
+      <div class="mb-3">
+        <label for="icon" class="form-label">Icon URL</label>
+        <input type="text" class="form-control" id="icon" name="icon" placeholder="Enter icon URL">
+      </div>
+      <button type="submit" class="btn btn-primary">Create Category</button>
+    </form>

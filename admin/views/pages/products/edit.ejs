@@ -1,0 +1,42 @@
+<h1 class="text-center"><%= pageTitle %></h1>
+<form action="/products/edit/<%= product._id %>" method="POST" class="mt-4">
+  <div class="mb-3">
+    <label for="name" class="form-label">Product Name</label>
+    <input type="text" class="form-control" id="name" name="name" value="<%= product ? product.name : '' %>" placeholder="Enter product name" required>
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter product description" required><%= product ? product.description : '' %></textarea>
+  </div>
+  <div class="mb-3">
+    <label for="price" class="form-label">Price</label>
+    <input type="number" class="form-control" id="price" name="price" value="<%= product ? product.price : '' %>" placeholder="Enter price" required>
+  </div>
+  <div class="mb-3">
+    <label for="category" class="form-label">Category</label>
+    <select class="form-control" id="category" name="category">
+        <option value="">Select Category</option>
+        <% categories.forEach(category => { %>
+          <option value="<%= category._id %>" <%= product && product.category && product.category._id.toString() === category._id.toString() ? 'selected' : '' %>><%= category.name %></option>
+        <% }); %>
+      </select>
+  </div>
+  <div class="mb-3">
+    <label for="stock" class="form-label">Stock</label>
+    <input type="number" class="form-control" id="stock" name="stock" value="<%= product ? product.stock : '' %>" placeholder="Enter stock quantity" required>
+  </div>
+  <div class="mb-3">
+    <label for="images" class="form-label">Image URLs (comma-separated)</label>
+    <input type="text" class="form-control" id="images" name="images" value="<%= product ? product.images.join(',') : '' %>" placeholder="Enter image URLs">
+  </div>
+  <div class="mb-3">
+    <label for="brand" class="form-label">Brand</label>
+    <select class="form-control" id="brand" name="brand">
+      <option value="">Select Brand</option>
+      <% brands.forEach(brand => { %>
+        <option value="<%= brand._id %>" <%= product && product.brand && product.brand._id.toString() === brand._id.toString() ? 'selected' : '' %>><%= brand.name %></option>
+      <% }); %>
+    </select>
+  </div>
+  <button type="submit" class="btn btn-primary">Update Product</button>
+</form>

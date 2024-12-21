@@ -1,0 +1,16 @@
+<h1 class="text-center"><%= pageTitle %></h1>
+<form action="/brands/create" method="POST" class="mt-4">
+  <div class="mb-3">
+    <label for="name" class="form-label">Brand Name</label>
+    <input type="text" class="form-control" id="name" name="name"  placeholder="Enter brand name" required>
+  </div>
+  <div class="mb-3">
+    <label for="logo" class="form-label">Logo URL</label>
+    <input type="text" class="form-control" id="logo" name="logo"  placeholder="Enter logo URL">
+  </div>
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter brand description"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Brand</button>
+</form>

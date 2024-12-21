@@ -1,0 +1,45 @@
+<h1>Products</h1>
+<a href="/products/create" class="btn btn-primary mb-3">Add Product</a>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Images</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Category</th>
+      <th>Brand</th>
+      <th>Stock</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if (products && products.length > 0) { %>
+      <% products.forEach(product => { %>
+        <tr>
+          <td>
+            <% product.images.forEach(image => { %>
+              <img src="<%= image %>" alt="<%= product.name %>" style="width: 50px;">
+            <% }); %>
+          </td>
+          <td><%= product.name %></td>
+          <td><%= product.description %></td>
+          <td>$<%= product.price %></td>
+          <td><%= product.category ? product.category.name : 'No Category' %></td>
+          <td><%= product.brand ? product.brand.name : 'No Brand' %></td>
+          <td><%= product.stock %></td>
+          <td>
+            <a href="/products/edit/<%= product._id %>" class="btn btn-warning btn-sm">Edit</a>
+            <form action="/products/delete/<%= product._id %>" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+    <% } else { %>
+      <tr>
+        <td colspan="8" class="text-center">No products available</td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>
