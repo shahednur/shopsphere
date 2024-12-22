@@ -1,296 +1,55 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { useCart } from '../contexts/CartContext'; // Access cart context
-import axios from 'axios';
-import { jwtDecode } from "jwt-decode";
-
+import React, { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { useCart } from "../contexts/CartContext";
 
 const Checkout = () => {
-  const navigate = useNavigate();
   const { cart } = useCart();
-  const [currentTab, setCurrentTab] = useState('personalInfo');
-  const [shippingDetails, setShippingDetails] = useState({
-    name: '',
-    address: '',
-    city: '',
-    postalCode: '',
-    country: '',
+  const [currentStep, setCurrentStep] = useState("pills-bill-info");
+  const [formData, setFormData] = useState({
+    personalInfo: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: "",
+      country: "",
+      state: "",
+      zip: "",
+    },
+    // shippingInfo: {
+    //   address: "",
+    //   city: "",
+    //   state: "",
+    //   zip: "",
+    //   country: "United States",
+    // },
+    paymentInfo: {
+      cardName: "",
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+    },
   });
 
-  const [billingDetails, setBillingDetails] = useState({
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    nameOnCard: '',
-  });
-
-  const handleShippingChange = (e) => {
-    setShippingDetails({ ...shippingDetails, [e.target.name]: e.target.value });
+  const handleInputChange = (section, field, value) => {
+    setFormData({
+      ...formData,
+      [section]: {
+        ...formData[section],
+        [field]: value,
+      },
+    });
   };
 
-  const handleBillingChange = (e) => {
-    setBillingDetails({ ...billingDetails, [e.target.name]: e.target.value });
+  const proceedToNextStep = (nextStep) => {
+    setCurrentStep(nextStep);
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-  };
-
-  const handleCheckout = async (e) => {
-    e.preventDefault();
-
-    try {
-
-      const token = localStorage.getItem('token');
-      const decodedToken = token ? jwtDecode(token) : null;
-      const userId = decodedToken ? decodedToken.id : null;
-  
-      if (!userId) {
-        alert('User is not authenticated. Please log in.');
-        navigate('/login'); // Redirect to login if user is not authenticated
-        return;
-      }
-      const totalAmount = calculateTotal();
-      const orderData = {
-        user: userId, // Replace with actual user ID from authentication
-        products: cart.map((item) => ({
-          product: item._id,
-          quantity: item.quantity,
-        })),
-        shippingAddress: {
-          street: shippingDetails.address,
-          city: shippingDetails.city,
-          postalCode: shippingDetails.postalCode,
-          country: shippingDetails.country,
-        },
-        paymentDetails: {
-          cardNumber: billingDetails.cardNumber,
-          expiryDate: billingDetails.expiryDate,
-          nameOnCard: billingDetails.nameOnCard,
-        },
-        totalAmount,
-      };
-
-      const response = await axios.post('http://localhost:5000/orders/create', orderData, { headers: { Authorization: token } });
-
-      if (response.data.success) {
-        alert('Order placed successfully!');
-        navigate('/order-tracking'); // Navigate to order tracking page
-      } else {
-        alert('Failed to place order. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error during checkout:', error);
-      alert('An error occurred while placing the order. Please try again.');
-    }
-  };
-
-  const renderTabContent = () => {
-    switch (currentTab) {
-      case 'personalInfo':
-        return (
-          <div>
-            <h5 className="mb-1">Personal Information</h5>
-            <p className="text-muted mb-4">Please fill all the information below</p>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="name"
-                    placeholder="Enter your name"
-                    value={shippingDetails.name}
-                    onChange={handleShippingChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Phone</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="phone"
-                    placeholder="Enter your phone"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-end">
-              <button
-                className="btn btn-primary"
-                onClick={() => setCurrentTab('shippingInfo')}
-              >
-                Proceed to Shipping
-              </button>
-            </div>
-          </div>
-        );
-      case 'shippingInfo':
-        return (
-          <div>
-            <h5 className="mb-1">Shipping Information</h5>
-            <p className="text-muted mb-4">Please fill all the information below</p>
-            <div className="mb-3">
-              <label className="form-label">Address</label>
-              <textarea
-                className="form-control"
-                name="address"
-                rows="3"
-                placeholder="Enter your address"
-                value={shippingDetails.address}
-                onChange={handleShippingChange}
-                required
-              />
-            </div>
-            <div className="row">
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">City</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="city"
-                    placeholder="Enter city"
-                    value={shippingDetails.city}
-                    onChange={handleShippingChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">Country</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="country"
-                    placeholder="Enter country"
-                    value={shippingDetails.country}
-                    onChange={handleShippingChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">Postal Code</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="postalCode"
-                    placeholder="Enter postal code"
-                    value={shippingDetails.postalCode}
-                    onChange={handleShippingChange}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-between">
-              <button
-                className="btn btn-light"
-                onClick={() => setCurrentTab('personalInfo')}
-              >
-                Back to Personal Info
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={() => setCurrentTab('paymentInfo')}
-              >
-                Proceed to Payment
-              </button>
-            </div>
-          </div>
-        );
-      case 'paymentInfo':
-        return (
-          <div>
-            <h5 className="mb-1">Payment Information</h5>
-            <p className="text-muted mb-4">Enter your payment details below</p>
-            <div className="row">
-              <div className="col-md-12">
-                <div className="mb-3">
-                  <label className="form-label">Name on Card</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="nameOnCard"
-                    placeholder="Enter name on card"
-                    value={billingDetails.nameOnCard}
-                    onChange={handleBillingChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Card Number</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="cardNumber"
-                    placeholder="xxxx xxxx xxxx xxxx"
-                    value={billingDetails.cardNumber}
-                    onChange={handleBillingChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="mb-3">
-                  <label className="form-label">Expiry Date</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="expiryDate"
-                    placeholder="MM/YY"
-                    value={billingDetails.expiryDate}
-                    onChange={handleBillingChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="mb-3">
-                  <label className="form-label">CVV</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="cvv"
-                    placeholder="123"
-                    value={billingDetails.cvv}
-                    onChange={handleBillingChange}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-between">
-              <button
-                className="btn btn-light"
-                onClick={() => setCurrentTab('shippingInfo')}
-              >
-                Back to Shipping
-              </button>
-              <button
-                className="btn btn-primary"
-                onClick={handleCheckout}
-              >
-                Complete Order
-              </button>
-            </div>
-          </div>
-        );
-      default:
-        return <div>Invalid Step</div>;
-    }
+    return cart
+      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .toFixed(2);
   };
 
   return (
@@ -298,9 +57,324 @@ const Checkout = () => {
       <Navbar />
       <section className="checkout">
         <div className="container">
-          <div className="card">
-            <div className="card-body">
-              {renderTabContent()}
+          <div className="row">
+            {/* Left Column */}
+            <div className="col-xl-8">
+              <div className="card">
+                <div className="card-body checkout-tab">
+                  <form>
+                    {/* Step Navigation */}
+                    <div className="step-arrow-nav mt-n3 mx-n3 mb-3">
+                      <ul
+                        className="nav nav-pills nav-justified custom-nav"
+                        role="tablist"
+                      >
+                        <li className="nav-item">
+                          <button
+                            className={`nav-link ${
+                              currentStep === "pills-bill-info" ? "active" : ""
+                            }`}
+                            onClick={() => setCurrentStep("pills-bill-info")}
+                          >
+                            <i className="ri-user-2-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
+                            Personal Info
+                          </button>
+                        </li>
+                        <li className="nav-item">
+                          <button
+                            className={`nav-link ${
+                              currentStep === "pills-payment" ? "active" : ""
+                            }`}
+                            onClick={() => setCurrentStep("pills-payment")}
+                          >
+                            <i className="ri-bank-card-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
+                            Payment Info
+                          </button>
+                        </li>
+                        <li className="nav-item">
+                          <button
+                            className={`nav-link ${
+                              currentStep === "pills-finish" ? "active" : ""
+                            }`}
+                            onClick={() => setCurrentStep("pills-finish")}
+                          >
+                            <i className="ri-checkbox-circle-line fs-16 p-2 bg-primary-subtle text-primary rounded-circle align-middle me-2"></i>
+                            Finish
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* Step Content */}
+                    <div className="tab-content">
+                      {/* Personal Info */}
+                      {currentStep === "pills-bill-info" && (
+                        <div className="tab-pane fade active show" id="pills-bill-info" role="tabpanel" aria-labelledby="pills-bill-info-tab">
+                          <h5 className="mb-1">Billing Information</h5>
+                          <p className="text-muted mb-4">
+                            Please fill all information below
+                          </p>
+                          <div className="row">
+                            <div className="col-md-6 mb-3 text-start">
+                              <label>First Name</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter first name"
+                                value={formData.personalInfo.firstName}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    "personalInfo",
+                                    "firstName",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="col-md-6 mb-3 text-start">
+                              <label>Last Name</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter last name"
+                                value={formData.personalInfo.lastName}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    "personalInfo",
+                                    "lastName",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="col-md-6 mb-3 text-start">
+                              <label>Email</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter email"
+                                value={formData.personalInfo.email}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    "personalInfo",
+                                    "email",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="col-md-6 mb-3 text-start">
+                              <label>Phone</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Enter phone"
+                                value={formData.personalInfo.phone}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    "personalInfo",
+                                    "phone",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="col-md-12 mb-3 text-start">
+                              <label
+                                for="billinginfo-address"
+                                className="form-label"
+                              >
+                                Address
+                              </label>
+                              <textarea
+                                className="form-control"
+                                id="billinginfo-address"
+                                placeholder="Enter address"
+                                rows="3"
+                                value={formData.personalInfo.address}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    "personalInfo",
+                                    "address",
+                                    e.target.value
+                                  )
+                                }
+                              ></textarea>
+                            </div>
+                            <div className="row">
+                              <div className="col-md-4">
+                                <div className="mb-3 text-start">
+                                  <label for="country" className="form-label">
+                                    Country
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="country"
+                                    placeholder="Enter Country"
+                                    value={formData.personalInfo.country}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "personalInfo",
+                                        "country",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="mb-3 text-start">
+                                  <label for="state" className="form-label">
+                                    State
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="state"
+                                    placeholder="Enter state"
+                                    value={formData.personalInfo.state}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "personalInfo",
+                                        "state",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="mb-3 text-start">
+                                  <label for="zip" className="form-label">
+                                    Zip Code
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    id="zip"
+                                    placeholder="Enter zip code"
+                                    value={formData.personalInfo.zip}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        "personalInfo",
+                                        "zip",
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn btn-primary mt-3"
+                            onClick={() =>
+                              proceedToNextStep("pills-payment")
+                            }
+                          >
+                            Proceed to Payment
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Additional Steps... */}
+                      {currentStep === "pills-payment" && (
+                  <div>
+                    <h5 className="mb-1">Payment Information</h5>
+                    <div className="card p-4 border shadow-none mb-0 mt-4">
+                      <div className="row gy-3">
+                        <div className="col-md-12 text-start">
+                          <label>Name on Card</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter name"
+                            value={formData.paymentInfo.cardName}
+                            onChange={(e) =>
+                              handleInputChange("paymentInfo", "cardName", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="col-md-6 text-start">
+                          <label>Credit Card Number</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="xxxx xxxx xxxx xxxx"
+                            value={formData.paymentInfo.cardNumber}
+                            onChange={(e) =>
+                              handleInputChange("paymentInfo", "cardNumber", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="col-md-3 text-start">
+                          <label>Expiration</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="MM/YY"
+                            value={formData.paymentInfo.expiryDate}
+                            onChange={(e) =>
+                              handleInputChange("paymentInfo", "expiryDate", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="col-md-3 text-start">
+                          <label>CVV</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="xxx"
+                            value={formData.paymentInfo.cvv}
+                            onChange={(e) =>
+                              handleInputChange("paymentInfo", "cvv", e.target.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-primary mt-3"
+                      onClick={() => alert("Order Completed!")}
+                    >
+                      Complete Order
+                    </button>
+                  </div>
+                )}
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column */}
+            <div className="col-xl-4">
+              <div className="card">
+                <div className="card-header">
+                  <h5>Order Summary</h5>
+                </div>
+                <div className="card-body">
+                  <table className="table">
+                    <tbody>
+                      {cart.map((item) => (
+                        <tr key={item._id}>
+                          <td>{item.name}</td>
+                          <td>
+                            {item.quantity} x ${item.price.toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                      <tr>
+                        <th>Total</th>
+                        <th>${calculateTotal()}</th>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>

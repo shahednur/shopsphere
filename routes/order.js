@@ -31,4 +31,26 @@ router.post('/create', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('user', 'name email') // Fetch only user name and email
+      .populate({
+        path: 'products.product', // Fetch only product names
+        select: 'name',
+      })
+      .select('user products shippingAddress totalAmount orderStatus createdAt'); // Fetch only required fields
+
+    res.render('layouts/main', {
+      pageTitle: 'Orders',
+      body: '../pages/orders/index',
+      orders,
+    });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
 module.exports = router;
