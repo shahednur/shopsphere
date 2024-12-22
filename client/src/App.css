@@ -688,6 +688,50 @@
 
 
 /* Shopping Cart */
+.avatar-lg {
+  height: 6rem;
+  width: 6rem;
+}
+.fs-14 {
+  font-size: .875rem !important;
+}
+.input-step {
+    border: 1px solid var(--vz-input-border-custom);
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    overflow: visible;
+    height: 37.5px;
+    border-radius: .25rem;
+    background: #fff;
+    padding: 4px;
+}
+.input-step button {
+  width: 1.4em;
+  font-weight: 300;
+  height: 100%;
+  line-height: .1em;
+  font-size: 1.4em;
+  padding: .2em !important;
+  background: #f3f6f9;
+  color: #212529;
+  border: none;
+  border-radius: 0.25rem;
+}
+.input-step input {
+  width: 4em;
+  height: 100%;
+  text-align: center;
+  border: 0;
+  background: 0 0;
+  color: #212529;
+  border-radius: 0.25rem;
+}
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .shopping-cart {
   padding: 60px 0;
 }

@@ -10,7 +10,7 @@ import { jwtDecode } from "jwt-decode";
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart } = useCart();
-
+  const [currentTab, setCurrentTab] = useState('personalInfo');
   const [shippingDetails, setShippingDetails] = useState({
     name: '',
     address: '',
@@ -22,6 +22,7 @@ const Checkout = () => {
   const [billingDetails, setBillingDetails] = useState({
     cardNumber: '',
     expiryDate: '',
+    cvv: '',
     nameOnCard: '',
   });
 
@@ -86,116 +87,222 @@ const Checkout = () => {
     }
   };
 
-  return (
-    <div>
-      <Navbar />
-      <section className="checkout">
-        <div className="container">
-          <h2 className="text-center">Checkout</h2>
-          <form onSubmit={handleCheckout} className="checkout-form">
+  const renderTabContent = () => {
+    switch (currentTab) {
+      case 'personalInfo':
+        return (
+          <div>
+            <h5 className="mb-1">Personal Information</h5>
+            <p className="text-muted mb-4">Please fill all the information below</p>
             <div className="row">
               <div className="col-md-6">
-                <h5>Shipping Details</h5>
                 <div className="mb-3">
-                  <label>Name</label>
+                  <label className="form-label">Name</label>
                   <input
                     type="text"
-                    name="name"
                     className="form-control"
+                    name="name"
+                    placeholder="Enter your name"
                     value={shippingDetails.name}
                     onChange={handleShippingChange}
                     required
                   />
                 </div>
+              </div>
+              <div className="col-md-6">
                 <div className="mb-3">
-                  <label>Address</label>
+                  <label className="form-label">Phone</label>
                   <input
                     type="text"
-                    name="address"
                     className="form-control"
-                    value={shippingDetails.address}
-                    onChange={handleShippingChange}
+                    name="phone"
+                    placeholder="Enter your phone"
                     required
                   />
                 </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end">
+              <button
+                className="btn btn-primary"
+                onClick={() => setCurrentTab('shippingInfo')}
+              >
+                Proceed to Shipping
+              </button>
+            </div>
+          </div>
+        );
+      case 'shippingInfo':
+        return (
+          <div>
+            <h5 className="mb-1">Shipping Information</h5>
+            <p className="text-muted mb-4">Please fill all the information below</p>
+            <div className="mb-3">
+              <label className="form-label">Address</label>
+              <textarea
+                className="form-control"
+                name="address"
+                rows="3"
+                placeholder="Enter your address"
+                value={shippingDetails.address}
+                onChange={handleShippingChange}
+                required
+              />
+            </div>
+            <div className="row">
+              <div className="col-md-4">
                 <div className="mb-3">
-                  <label>City</label>
+                  <label className="form-label">City</label>
                   <input
                     type="text"
-                    name="city"
                     className="form-control"
+                    name="city"
+                    placeholder="Enter city"
                     value={shippingDetails.city}
                     onChange={handleShippingChange}
                     required
                   />
                 </div>
+              </div>
+              <div className="col-md-4">
                 <div className="mb-3">
-                  <label>Postal Code</label>
+                  <label className="form-label">Country</label>
                   <input
                     type="text"
-                    name="postalCode"
                     className="form-control"
-                    value={shippingDetails.postalCode}
-                    onChange={handleShippingChange}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label>Country</label>
-                  <input
-                    type="text"
                     name="country"
-                    className="form-control"
+                    placeholder="Enter country"
                     value={shippingDetails.country}
                     onChange={handleShippingChange}
                     required
                   />
                 </div>
               </div>
-              <div className="col-md-6">
-                <h5>Billing Details</h5>
+              <div className="col-md-4">
                 <div className="mb-3">
-                  <label>Card Number</label>
+                  <label className="form-label">Postal Code</label>
                   <input
                     type="text"
-                    name="cardNumber"
                     className="form-control"
-                    value={billingDetails.cardNumber}
-                    onChange={handleBillingChange}
+                    name="postalCode"
+                    placeholder="Enter postal code"
+                    value={shippingDetails.postalCode}
+                    onChange={handleShippingChange}
                     required
                   />
                 </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between">
+              <button
+                className="btn btn-light"
+                onClick={() => setCurrentTab('personalInfo')}
+              >
+                Back to Personal Info
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => setCurrentTab('paymentInfo')}
+              >
+                Proceed to Payment
+              </button>
+            </div>
+          </div>
+        );
+      case 'paymentInfo':
+        return (
+          <div>
+            <h5 className="mb-1">Payment Information</h5>
+            <p className="text-muted mb-4">Enter your payment details below</p>
+            <div className="row">
+              <div className="col-md-12">
                 <div className="mb-3">
-                  <label>Expiry Date</label>
+                  <label className="form-label">Name on Card</label>
                   <input
                     type="text"
-                    name="expiryDate"
                     className="form-control"
-                    value={billingDetails.expiryDate}
-                    onChange={handleBillingChange}
-                    placeholder="MM/YY"
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label>Name on Card</label>
-                  <input
-                    type="text"
                     name="nameOnCard"
-                    className="form-control"
+                    placeholder="Enter name on card"
                     value={billingDetails.nameOnCard}
                     onChange={handleBillingChange}
                     required
                   />
                 </div>
               </div>
+              <div className="col-md-6">
+                <div className="mb-3">
+                  <label className="form-label">Card Number</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="cardNumber"
+                    placeholder="xxxx xxxx xxxx xxxx"
+                    value={billingDetails.cardNumber}
+                    onChange={handleBillingChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="mb-3">
+                  <label className="form-label">Expiry Date</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="expiryDate"
+                    placeholder="MM/YY"
+                    value={billingDetails.expiryDate}
+                    onChange={handleBillingChange}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-md-3">
+                <div className="mb-3">
+                  <label className="form-label">CVV</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="cvv"
+                    placeholder="123"
+                    value={billingDetails.cvv}
+                    onChange={handleBillingChange}
+                    required
+                  />
+                </div>
+              </div>
             </div>
-            <div className="text-center">
-              <button type="submit" className="btn btn-primary">
-                Complete Checkout
+            <div className="d-flex justify-content-between">
+              <button
+                className="btn btn-light"
+                onClick={() => setCurrentTab('shippingInfo')}
+              >
+                Back to Shipping
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={handleCheckout}
+              >
+                Complete Order
               </button>
             </div>
-          </form>
+          </div>
+        );
+      default:
+        return <div>Invalid Step</div>;
+    }
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <section className="checkout">
+        <div className="container">
+          <div className="card">
+            <div className="card-body">
+              {renderTabContent()}
+            </div>
+          </div>
         </div>
       </section>
       <Footer />
