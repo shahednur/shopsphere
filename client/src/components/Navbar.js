@@ -43,9 +43,9 @@ export default function Navbar() {
               </a>
             </li>
             <li className="nav-item">
-              <a className="btn btn-primary custom-button" href="#">
-                Sign Up
-              </a>
+              <Link className="btn btn-primary custom-button" to="/register">
+              Sign Up
+              </Link>
             </li>
           </ul>
         </div>
